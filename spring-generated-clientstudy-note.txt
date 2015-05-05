@@ -1,0 +1,85 @@
+
+
+See: 
+http://stackoverflow.com/questions/1945618/tracing-xml-request-responses-with-jax-ws
+http://stackoverflow.com/questions/5350476/tracing-xml-request-responses-with-jax-ws-when-error-occurs
+
+to log soap request/response in java console, add these statements:
+    	System.setProperty("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", "true");
+    	System.setProperty("com.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump", "true");
+    	System.setProperty("com.sun.xml.ws.transport.http.HttpAdapter.dump", "true");
+    	System.setProperty("com.sun.xml.internal.ws.transport.http.HttpAdapter.dump", "true");
+
+
+--------------------------------------------------------
+
+exigen/OpenL doesn't work for Spring client. ispect show the DriverRisk class:
+    "arg0",
+    "arg1",
+    "arg2"
+does not match the wsdl
+
+country and weather service work
+
+---------------- to test jaxws implement -------------------
+1. Go to Soap-Spring-maven-1, right click and run application.java
+2. Right click and run JAXWSCountryClient.java to test jaxws version
+3. Right click and run SpringCountryClientTest to test Spring version
+
+
+---------------- if mven build error : duplicated .. ---------------
+delete the generated target...hello.wsdl package, comment out in pom.xml
+            <!-- tag::wsdl[] -->
+            <!-- 
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.12.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <schemaLanguage>WSDL</schemaLanguage>
+                    <generatePackage>hello.wsdl</generatePackage>
+                    <schemas>
+                        <schema>
+                            <url>http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl</url>
+                        </schema>
+                    </schemas>
+                </configuration>
+            </plugin>
+            -->
+            <!-- end::wsdl[] -->
+
+
+----------- if maven error: failed: Unable to find a single main class ...-------------
+This can be ignore becase there are multiple test main in the project
+
+
+
+
+
+---------------------------------------------------------------
+to run in command line:
+java -jar target/gs-soap-service-0.1.0.jar
+if errors, change the port: 
+java -jar target/gs-soap-service-0.1.0.jar  --server.port=8181
+
+check wsdl:
+http://localhost:8181/ws/countries.wsdl
+http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl
+http://dev2openldemo01.eqxdev.exigengroup.com/webservice/Example3-AutoPolicyCalculation?wsdl
+
+Or run App i the IDE, can change port using args:
+public class App {
+
+	public static void main(String[] args) {
+//		SpringApplication.run(App.class, ags);
+		SpringApplication.run(App.class, "--server.port=8282" ); 
+	}
+}
+
